@@ -1,0 +1,105 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: post,
+	}));
+}
+
+const post = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={`${post.data.title} - Blog Kato Ambiental`}>
+	<article class="bg-white">
+        <!-- Hero Section -->
+        <header class="pt-32 pb-16 bg-[#0f4229] relative overflow-hidden">
+            <div class="absolute -top-40 -left-40 w-96 h-96 bg-tertiary/10 rounded-full blur-3xl"></div>
+            
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                {post.data.category && (
+                    <span class="inline-block bg-primary/10 text-white font-bold px-4 py-1.5 rounded-full uppercase tracking-wider text-sm mb-6">
+                        {post.data.category}
+                    </span>
+                )}
+                
+                <h1 class="text-3xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+                    {post.data.title}
+                </h1>
+                
+                <div class="flex items-center justify-center gap-4 text-sm text-white font-medium">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-regular fa-calendar-days text-primary"></i>
+                        <time datetime={post.data.pubDate.toISOString()}>
+                            {post.data.pubDate.toLocaleDateString('pt-BR', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            })}
+                        </time>
+                    </div>
+                    
+                    {post.data.updatedDate && (
+                        <div class="flex items-center gap-2 border-l border-gray-300 pl-4">
+                            <i class="fa-solid fa-pen-to-square text-primary"></i>
+                            <span>Atualizado em 
+                                <time datetime={post.data.updatedDate.toISOString()}>
+                                    {post.data.updatedDate.toLocaleDateString('pt-BR', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    })}
+                                </time>
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </header>
+
+        {/* Imagem de Destaque (se houver) */}
+        {post.data.heroImage && (
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+                <div class="rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                    <img 
+                        src={post.data.heroImage} 
+                        alt={post.data.title}
+                        class="w-full h-auto max-h-[500px] object-cover"
+                    />
+                </div>
+            </div>
+        )}
+
+        {/* Conteúdo do Post */}
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="prose prose-lg prose-emerald max-w-none prose-headings:text-secondary prose-a:text-primary hover:prose-a:text-secondary transition-colors prose-img:rounded-xl prose-img:shadow-md">
+                <Content />
+            </div>
+            
+            {/* Tags (Footer do Post) */}
+            {post.data.tags && post.data.tags.length > 0 && (
+                <div class="mt-12 pt-8 border-t border-gray-200">
+                    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Tags relacionadas</h3>
+                    <div class="flex flex-wrap gap-2">
+                        {post.data.tags.map((tag: string) => (
+                            <span class="bg-gray-100 text-grey hover:bg-primary hover:text-white transition-colors cursor-pointer px-4 py-2 rounded-lg text-sm font-medium">
+                                #{tag}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
+            
+            {/* Voltar para o Blog */}
+            <div class="mt-12 text-center">
+                <a href="/blog" class="inline-flex items-center gap-2 text-primary font-bold hover:text-secondary transition-colors">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar para o Blog
+                </a>
+            </div>
+        </div>
+	</article>
+</Layout>

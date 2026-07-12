@@ -1,0 +1,103 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const pageTitle = "Blog Kato Ambiental";
+const pageDescription = "Fique por dentro das novidades, tendências e informações sobre consultoria e licenciamento ambiental.";
+---
+
+<Layout title={`${pageTitle} - Kato Soluções Ambientais`}>
+    <section class="pt-40 pb-32 bg-[#0f4229] relative overflow-hidden">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+        <div class="max-w-7xl mx-auto bg-[#0f4229] px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-4xl md:text-5xl text-white font-extrabold mb-4 tracking-tight">
+                {pageTitle}
+            </h1>
+            <p class="text-lg md:text-xl text-white max-w-2xl mx-auto">
+                {pageDescription}
+            </p>
+        </div>
+    </section>
+
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {
+                    posts.map((post) => (
+                        <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col group">
+                            {post.data.heroImage ? (
+                                <a href={`/blog/${post.id}/`} class="block overflow-hidden h-48 relative">
+                                    <img 
+                                        src={post.data.heroImage} 
+                                        alt={post.data.title} 
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                                    />
+                                    {post.data.category && (
+                                        <div class="absolute top-4 left-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                                            {post.data.category}
+                                        </div>
+                                    )}
+                                </a>
+                            ) : (
+                                <a href={`/blog/${post.id}/`} class="block overflow-hidden h-48 bg-secondary/5 relative flex items-center justify-center">
+                                     <i class="fa-solid fa-leaf text-4xl text-primary/20"></i>
+                                     {post.data.category && (
+                                        <div class="absolute top-4 left-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow-sm">
+                                            {post.data.category}
+                                        </div>
+                                    )}
+                                </a>
+                            )}
+                            <div class="p-6 flex flex-col flex-grow">
+                                <div class="flex items-center gap-2 mb-3 text-sm text-grey">
+                                    <i class="fa-regular fa-calendar-days text-primary"></i>
+                                    <time datetime={post.data.pubDate.toISOString()}>
+                                        {
+                                            post.data.pubDate.toLocaleDateString('pt-BR', {
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric',
+                                            })
+                                        }
+                                    </time>
+                                </div>
+                                <a href={`/blog/${post.id}/`} class="block mb-2">
+                                    <h2 class="text-xl font-bold text-secondary group-hover:text-primary transition-colors leading-tight">
+                                        {post.data.title}
+                                    </h2>
+                                </a>
+                                <p class="text-grey text-sm mb-4 line-clamp-3">
+                                    {post.data.description}
+                                </p>
+                                
+                                {post.data.tags && post.data.tags.length > 0 && (
+                                    <div class="flex flex-wrap gap-2 mt-auto pt-4 border-t border-gray-100">
+                                        {post.data.tags.map((tag: string) => (
+                                            <span class="text-[11px] font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded-md">
+                                                #{tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        </article>
+                    ))
+                }
+            </div>
+            
+            {posts.length === 0 && (
+                <div class="text-center py-20">
+                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                        <i class="fa-regular fa-newspaper text-2xl text-gray-400"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-secondary mb-2">Nenhum post publicado ainda</h3>
+                    <p class="text-grey">Fique ligado! Em breve teremos novidades por aqui.</p>
+                </div>
+            )}
+        </div>
+    </section>
+</Layout>
