@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CTA from '../components/CTA.astro';
+
+// Configuração do FormSubmit para enviar o email para mariana@katoambiental.com
+const formAction = "https://formsubmit.co/mariana@katoambiental.com"; 
+---
+
+<Layout title="Canal de Denúncias - Kato Soluções Ambientais">
+    <!-- Banner -->
+    <div class="relative w-full h-[300px] flex items-center bg-[url('../assets/bg-banner.webp')] justify-start bg-cover bg-center overflow-hidden">
+        <div class="absolute inset-0 bg-black/40"></div>
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <h1 class="text-4xl md:text-5xl font-bold text-white border-l-4 border-primary pl-4">
+                Canal de Denúncias
+            </h1>
+        </div>
+    </div>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          
+          <!-- Text Content -->
+          <div class="flex flex-col text-center lg:text-left">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 uppercase tracking-[0.3em]">
+              <span class="text-primary">B e m - v i n d o</span>
+            </h2>
+            <div class="text-gray-600 leading-relaxed space-y-4 text-sm md:text-base text-justify">
+              <p>
+                Aqui valorizamos condutas éticas como princípios fundamentais das nossas operações.
+              </p>
+              <p>
+                Caso tenha conhecimento de condutas antiéticas ou contrárias à Lei nº 12.846/13 (Lei Anticorrupção) em nossa empresa, conte conosco para ouvir suas preocupações.
+              </p>
+              <p>
+                As informações fornecidas por você são tratadas com extrema confidencialidade, respeitando a Lei nº 13.709/18 (Lei Geral de Proteção de Dados) e garantindo o anonimato do denunciante e a segurança das provas apresentadas. Sua colaboração é essencial para manter nossa integridade e cultura de compliance.
+              </p>
+              <p>
+                Juntos, podemos construir um ambiente de trabalho justo e transparente. Conte-nos sua denúncia e ajude-nos a aprimorar nossos processos, sempre visando o bem-estar de todos os colaboradores e a saúde da empresa.
+              </p>
+              <p class="pt-4 font-semibold">
+                Agradecemos sua coragem em se manifestar.<br>
+                Atenciosamente,<br>
+                Equipe Compliance da Kato Ambiental.
+              </p>
+            </div>
+          </div>
+
+          <!-- Form Content -->
+          <div class="bg-gray-50 p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h3 class="text-xl font-bold text-gray-800 mb-6 uppercase border-b pb-4">Faça sua denúncia</h3>
+            
+            <form action={formAction} method="POST" class="space-y-5">
+              
+              <!-- Configurações ocultas do FormSubmit -->
+              <input type="hidden" name="_subject" value="Nova Denúncia Recebida - Kato Ambiental">
+              <input type="hidden" name="_template" value="table">
+              
+              <div>
+                <label for="assunto" class="block text-xs font-bold text-gray-800 mb-1 ml-1">Assunto</label>
+                <input type="text" id="assunto" name="assunto" placeholder="Informe o assunto" required
+                  class="w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors"
+                />
+              </div>
+
+              <div>
+                <label for="descricao" class="block text-xs font-bold text-gray-800 mb-1 ml-1">Descreva sua reclamação</label>
+                <textarea id="descricao" name="descricao" rows="8" placeholder="Deixe sua reclamação" required
+                  class="w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 rounded focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none"
+                ></textarea>
+              </div>
+
+              <div class="flex justify-start">
+                  <button type="submit" class="bg-primary hover:bg-secondary text-white font-bold py-3 px-8 rounded shadow-lg transform hover:-translate-y-1 transition-all duration-300 flex items-center gap-2">
+                    Enviar
+                    <i class="fa-solid fa-arrow-right"></i>
+                  </button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+</Layout>
